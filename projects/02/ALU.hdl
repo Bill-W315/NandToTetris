@@ -43,4 +43,25 @@ CHIP ALU {
 
     PARTS:
    // Put you code here:
+   // X part
+   Mux16(a=x,b=false,sel=zx,out=zxOut);
+   Not16(in=zxOut,out=notX);
+   Mux16(a=zxOut,b=notX,sel=nx,out=nxOut);
+   // Y part
+   Mux16(a=y,b=false,sel=zy,out=zyOut);
+   Not16(in=zyOut,out=notY);
+   Mux16(a=zyOut,b=notY,sel=ny,out=nyOut);
+   // X & Y
+   Add16(a=nxOut,b=nyOut,out=xAddy);
+   And16(a=nxOut,b=nyOut,out=xAndy);
+   Mux16(a=xAndy,b=xAddy,sel=f,out=result);
+   Not16(in=result,out=notResult);
+   Mux16(a=result,b=notResult,sel=no,out=out,out[0..7]=OutFront,out[8..15]=OutBack,out[15]=OutFristBit);
+   // ZR (Status Report)
+   Or8Way(in[0..7]=OutFront,out=or1);
+   Or8Way(in[0..7]=OutBack,out=or2);
+   Or(a=or1,b=or2,out=orOut);
+   Not(in=orOut,out=zr);
+   // NG (Status Report)
+   And(a=OutFristBit,b=true,out=ng);
 }
