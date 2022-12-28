@@ -22,10 +22,24 @@
  * Screen and Keyboard chip specifications given in the book.
  */
 
+/*
+    110000000000000(15) 24576 KBD
+    101111111111111(15) 24575 Screen end
+    100000000000000(15) 16384 Screen start
+    011111111111111(15) 16383 Main Memory
+    000000000000000(15) 0 Main Memory
+*/
 CHIP Memory {
     IN in[16], load, address[15];
     OUT out[16];
 
     PARTS:
     // Put your code here:
+    DMux(in=load,sel=address[14],a=toMain,b=toKeyboardOrScreen);
+    DMux(in=toKeyboardOrScreen,sel=address[13],a=toScreen);
+    RAM16K(in=in,load=toMain,address=address[0..13],out=main);
+    Screen(in=in,load=toScreen,address=address[0..12],out=screen);
+    Keyboard(out=keyboard);
+    Mux16(a=screen,b=keyboard,sel=address[13],out=keyboardOrScreen);
+    Mux16(a=main,b=keyboardOrScreen,sel=address[14],out=out);
 }
