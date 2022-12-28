@@ -12,3 +12,80 @@
 // the screen should remain fully clear as long as no key is pressed.
 
 // Put your code here.
+//if(key is pressed){
+//    screen = black
+//}else{
+//    screen = white
+//}
+//screen row 256pixel col 512pixel  
+//for(count=1;count<=16;count++){
+//   for(count2=1;count2<=32;count2++){
+//      
+//  }
+//}
+
+//total screen bit length
+@8192
+D=A
+@len
+M=D
+
+//Main loop
+(LOOP1)
+//get input from keyboard
+@KBD
+D=M
+@WHITE
+D;JEQ
+@BLACK
+0;JMP
+
+(WHITE)
+@i
+M=0
+
+(LOOP2)
+@len
+D=M
+@i
+D=D-M
+@LOOP1
+D;JEQ
+
+@SCREEN
+D=A
+@i
+//用offset算地址
+A=D+M
+//這邊的M是A位址的記憶體內容 所以register i的內容不受影響
+M=0
+
+@i
+M=M+1
+
+@LOOP2
+0;JMP
+
+(BLACK)
+@i
+M=0
+
+(LOOP3)
+@len
+D=M
+@i
+D=D-M
+@LOOP1
+D;JEQ
+
+@SCREEN
+D=A
+@i
+A=D+M
+M=-1
+
+@i
+M=M+1
+
+@LOOP3
+0;JMP

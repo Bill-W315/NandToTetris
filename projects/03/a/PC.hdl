@@ -17,4 +17,13 @@ CHIP PC {
 
     PARTS:
     // Put your code here:
+    //Three possible inputs 0 & in[t] & out[t]+1 (out=out[t] when register load is 0) , use or gates to manipulate
+    //register's load. 
+    Or(a=inc,b=load,out=sel1);
+    Or(a=sel1,b=reset,out=sel2);
+    Mux16(a=registerOut,b=addOne,sel=inc,out=incOut);
+    Mux16(a=incOut,b=in,sel=load,out=loadOut);
+    Mux16(a=loadOut,b=false,sel=reset,out=resetOut);
+    Register(in=resetOut,load=sel2,out=out,out=registerOut);
+    Inc16(in=registerOut,out=addOne);
 }
